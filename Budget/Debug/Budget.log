@@ -1,0 +1,3 @@
+﻿  categories.cpp
+C:\vault\cppCode\Budget\Budget\categories.cpp(91): warning C4715: 'Categories::print': not all control paths return a value
+  Budget.vcxproj -> C:\vault\cppCode\Budget\Debug\Budget.exe
