@@ -1,3 +1,8 @@
-﻿  categories.cpp
-C:\vault\cppCode\Budget\Budget\categories.cpp(91): warning C4715: 'Categories::print': not all control paths return a value
-  Budget.vcxproj -> C:\vault\cppCode\Budget\Debug\Budget.exe
+﻿  Account.cpp
+  categories.cpp
+  Checking.cpp
+  Client.cpp
+  Generating Code...
+C:\vault\cppCode\cpp_Budget\Budget\categories.cpp(91): warning C4715: 'Categories::print': not all control paths return a value
+  LINK : C:\vault\cppCode\cpp_Budget\Debug\Budget.exe not found or not built by the last incremental link; performing full link
+  Budget.vcxproj -> C:\vault\cppCode\cpp_Budget\Debug\Budget.exe

@@ -9,6 +9,7 @@ void clearTest();
 void ptrTest();
 void test_getCategory();
 
+// this is a test 
 
 int main(void) {
 	//savingsTest();
@@ -16,7 +17,6 @@ int main(void) {
 	//clearTest();
 	//ptrTest();
 	test_getCategory();
-	testChecking();
 	return 0;
 }
 
