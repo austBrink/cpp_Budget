@@ -12,6 +12,7 @@ void test_getCategory();
 void testChecking();
 
 
+
 // this is a test 
 
 int main(void) {
@@ -20,7 +21,7 @@ int main(void) {
 	//clearTest();
 	//ptrTest();
 	//test_getCategory();
-	testChecking();
+	//testChecking();
 	return 0;
 }
 
@@ -204,45 +205,92 @@ void test_getCategory() {
 void testChecking() {
 
 	//create a checking account.
+	//Checking* myChecking = new Checking();
+	//
+	//std::cout << myChecking->getName() << "\n";
+	//
+	//int retVal;
+	//
+	//retVal = myChecking->removeCategory("dope");
+	//std::cout << retVal << std::endl;
+	//
+	//retVal = myChecking->deposit(50,"catOne");
+	//std::cout << retVal << std::endl;
+	//
+	//std::cout << "ADD FUNCTIONS" << std::endl;
+	//retVal = myChecking->createCategory("catOne");
+	//std::cout << retVal << std::endl;
+	//retVal = myChecking->createCategory("catTwo");
+	//std::cout << retVal << std::endl;
+	//retVal = myChecking->createCategory("catTwo");
+	//std::cout << retVal << std::endl;
+	//std::cout << myChecking->getName() << std::endl;
+	//
+	//std::cout << "REMOVE" << std::endl;
+	//retVal = myChecking->removeCategory("dope");
+	//std::cout << retVal << std::endl;
+	//retVal = myChecking->removeCategory("catTwo");
+	//std::cout << retVal << std::endl;
+	//
+	//std::cout << "GET CAT " << std::endl;
+	//
+	//Account* temp = myChecking->getCategory/("catOne");
+	//std::cout << temp->getName() << std::endl;
+	//
+	//std::cout << "DEPO" << std::endl;
+	//retVal = myChecking->deposit(90, "dope");
+	//std::cout << retVal << std::endl;
+	//retVal = myChecking->deposit(90, "catTwo");
+	//std::cout << retVal << std::endl;
+	//
+	//// testing the withdraw and remove // 
+	//std::cout << "TESTING WITHDRAW" << std::endl;
+	//retVal = myChecking->withdraw(90, "catThree");
+	//myChecking->deposit(900, "catTwo");
+	//myChecking->createCategory("catThree");
+	//std::cout << retVal << std::endl;
+	//myChecking -> deposit(100, "catThree");
+	//retVal = myChecking->withdraw(90, "catThree");
+	//std::cout << retVal << std::endl;
+	//retVal = myChecking->withdraw(100, "catThree");
+	//std::cout << retVal << std::endl;
+	//retVal = myChecking->withdraw(1000, "catThree");
+	//std::cout << retVal << std::endl;
+
+
 	Checking* myChecking = new Checking();
-	
-	std::cout << myChecking->getName() << "\n";
-	
 	int retVal;
+	retVal = myChecking->withdraw(100,"one");
+	//should be -1 
+	std::cout << retVal << std::endl;
+	myChecking->createCategory("one");
+	myChecking->deposit(100, "one");
+	myChecking->createCategory("two");
+	myChecking->deposit(200,"two");
 
-	retVal = myChecking->removeCategory("dope");
+	//should be 0 
+	retVal = myChecking->withdraw(50, "one");
+	std::cout << retVal << std::endl;
+	//should be -2 
+	retVal = myChecking->withdraw(100, "goop");
+	std::cout << retVal << std::endl;
+	//should be -4 
+	retVal = myChecking->withdraw(100,"one");
+	std::cout << retVal << std::endl;
+	//should be -3
+	retVal = myChecking->withdraw(900, "one");
+
 	std::cout << retVal << std::endl;
 
-	retVal = myChecking->deposit(50,"catOne");
-	std::cout << retVal << std::endl;
-
-
-	std::cout << "ADD FUNCTIONS" << std::endl;
-	retVal = myChecking->createCategory("catOne");
-	std::cout << retVal << std::endl;
-	retVal = myChecking->createCategory("catTwo");
-	std::cout << retVal << std::endl;
-	retVal = myChecking->createCategory("catTwo");
-	std::cout << retVal << std::endl;
-	std::cout << myChecking->getName() << std::endl;
-
-	std::cout << "REMOVE" << std::endl;
-	retVal = myChecking->removeCategory("dope");
-	std::cout << retVal << std::endl;
-	retVal = myChecking->removeCategory("catTwo");
-	std::cout << retVal << std::endl;
-
-	std::cout << "GET CAT " << std::endl;
-
-	Account* temp = myChecking->getCategory("catOne");
-	std::cout << temp->getName() << std::endl;
+	// IT WORKS 
 	
 
-	std::cout << "DEPO" << std::endl;
-	retVal = myChecking->deposit(90, "dope");
-	std::cout << retVal << std::endl;
-	retVal = myChecking->deposit(90, "catTwo");
-	std::cout << retVal << std::endl;
+
+	
+	
+	
+	
+
 
 
 	
