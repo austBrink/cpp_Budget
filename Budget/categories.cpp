@@ -91,9 +91,7 @@ int Categories :: print() {
 }
 
 void Categories::clear() {
-	
 	Account* temp;
-
 	temp = root;
 	if (root != NULL) {
 		while (root != NULL) {
@@ -102,7 +100,6 @@ void Categories::clear() {
 			delete temp;
 		}
 	}
-
 }
 
 bool Categories::isEmpty() {

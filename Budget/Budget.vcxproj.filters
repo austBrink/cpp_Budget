@@ -32,10 +32,10 @@
     <ClInclude Include="Account.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Checking.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="categories.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Checking.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
