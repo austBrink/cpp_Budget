@@ -1,6 +1,7 @@
 #include<iostream>
 #include"Account.h"
 #include"Categories.h"
+#include"Checking.h"
 
 
 void savingsTest();
@@ -8,6 +9,8 @@ void categoriesTest();
 void clearTest();
 void ptrTest();
 void test_getCategory();
+void testChecking();
+
 
 // this is a test 
 
@@ -16,7 +19,8 @@ int main(void) {
 	//categoriesTest();
 	//clearTest();
 	//ptrTest();
-	test_getCategory();
+	//test_getCategory();
+	testChecking();
 	return 0;
 }
 
@@ -98,7 +102,10 @@ void categoriesTest() {
 	Account* a4 = new Account("a4");
 
 	Categories* myList = new Categories();
-	
+	if (myList->getCategory("a0")==NULL) {
+		std::cout << ":(" << std::endl;
+	}
+
 	myList->add(a0);
 	myList->add(a1);
 	myList->add(a2);
@@ -192,6 +199,55 @@ void test_getCategory() {
 	Account *re = myCats->getCategory("new1");
 	re->deposit(100);
 	myCats->print();
+}
+
+void testChecking() {
+
+	//create a checking account.
+	Checking* myChecking = new Checking();
+	
+	std::cout << myChecking->getName() << "\n";
+	
+	int retVal;
+
+	retVal = myChecking->removeCategory("dope");
+	std::cout << retVal << std::endl;
+
+	retVal = myChecking->deposit(50,"catOne");
+	std::cout << retVal << std::endl;
+
+
+	std::cout << "ADD FUNCTIONS" << std::endl;
+	retVal = myChecking->createCategory("catOne");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->createCategory("catTwo");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->createCategory("catTwo");
+	std::cout << retVal << std::endl;
+	std::cout << myChecking->getName() << std::endl;
+
+	std::cout << "REMOVE" << std::endl;
+	retVal = myChecking->removeCategory("dope");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->removeCategory("catTwo");
+	std::cout << retVal << std::endl;
+
+	std::cout << "GET CAT " << std::endl;
+
+	Account* temp = myChecking->getCategory("catOne");
+	std::cout << temp->getName() << std::endl;
+	
+
+	std::cout << "DEPO" << std::endl;
+	retVal = myChecking->deposit(90, "dope");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->deposit(90, "catTwo");
+	std::cout << retVal << std::endl;
+
+
+	
+	
+
 }
 
 

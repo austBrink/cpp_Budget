@@ -19,8 +19,8 @@ public:
 	int deposit(double sum, std::string categoryName);
 	int withdraw(double sum, std::string categoryName);
 	double getBalance();
-	double getName();
-	
+	std::string getName();
+
 };
 
 
