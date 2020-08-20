@@ -1,0 +1,7 @@
+*.sln
+.vs/Budget/v16/
+Debug/
+Budget/Debug/
+*.vcxproj
+*.filters
+*.user 
