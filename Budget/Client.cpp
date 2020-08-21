@@ -2,6 +2,7 @@
 #include"Account.h"
 #include"Categories.h"
 #include"Checking.h"
+#include<string>
 
 
 void savingsTest();
@@ -10,19 +11,101 @@ void clearTest();
 void ptrTest();
 void test_getCategory();
 void testChecking();
+void tests();
+void menuPrint();
+void menuSwitch(std::string& userChoice, Checking *myChecking); 
+#define HEADER "\n\t\t~~BUDGET~~\n"
 
-
-
-// this is a test 
 
 int main(void) {
-	//savingsTest();
-	//categoriesTest();
-	//clearTest();
-	//ptrTest();
-	//test_getCategory();
-	//testChecking();
+	
+	Checking *myChecking = new Checking();
+	
+
+	std::cout << HEADER << std::endl;
+	menuPrint();
+	std::string userChoice = "";
+	while (userChoice != "q") {
+		std::cout << "-->> ";
+		std::cin >> userChoice;
+		menuSwitch(userChoice,myChecking);
+	}
+	bool debug = false;
+	if (debug) {
+		tests();
+	}
+	
 	return 0;
+
+}
+
+void menuSwitch(std::string& userChoice, Checking *myChecking) {
+	double sum = 0.0;
+	std::string categoryName = "";
+	int retVal;
+	if (userChoice == "show") {
+		menuPrint();
+	}
+	else if (userChoice == "in") {
+		std::cout << "enter an amount -->> ";
+		std::cin >> sum;
+		std::cout << "enter a destination category -->> ";
+		std::cin >> categoryName;
+		retVal = myChecking->deposit(sum,categoryName);
+		if (retVal == -1) {
+			std::cout << "error: no categories to deposit to\n";
+		}
+		else if (retVal == -2) {
+			std::cout << "error: " << categoryName << " is not a valid category \n";
+		}
+		else {
+			std::cout << "success: $" << sum << " has been deposited to " << categoryName << " account\n";
+		}
+	}
+	else if (userChoice == "out") {
+		std::cout << "withdraw" << std::endl;
+	}
+	else if (userChoice == "trans") {
+		std::cout << "transfer" << std::endl;
+	}
+	else if (userChoice == "mkcat") {
+		std::cout << "create category" << std::endl;
+	}
+	else if (userChoice == "rmcat") {
+		std::cout << "remove category" << std::endl;
+	}
+	else if (userChoice == "opt") {
+		std::cout << "options print" << std::endl;
+	}
+	else if (userChoice == "q") {
+		std::cout << "leaving" << std::endl;
+	}
+	else {
+		std::cout << "enter a valid choice" << std::endl;
+	}
+}
+
+
+void menuPrint() {
+	std::cout << "ENTER A VALID CHOICE:\n";
+	std::cout << "show) show accounts and categories\n";
+	std::cout << "in) deposit \n";
+	std::cout << "out) withdraw \n";
+	std::cout << "trans) transfer \n";
+	std::cout << "mkcat) create category \n";
+	std::cout << "rmcat remove category \n";
+	std::cout << "opt) options \n";
+	std::cout << "q) quit \n";
+}
+
+
+void tests() {
+	savingsTest();
+	categoriesTest();
+	clearTest();
+	ptrTest();
+	test_getCategory();
+	testChecking();
 }
 
 void savingsTest() {
