@@ -13,14 +13,20 @@ void test_getCategory();
 void testChecking();
 void tests();
 void menuPrint();
-void menuSwitch(std::string& userChoice, Checking *myChecking); 
+void menuSwitch(std::string& userChoice, Checking *myChecking, Account *Savings); 
+void mkcat(Checking* myChecking);
+void in(Checking* myChecking);
+void out(Checking* myChecking);
+void rmcat(Checking *myChecking);
+void trans(Checking* myChecking, Account *Savings);
+
 #define HEADER "\n\t\t~~BUDGET~~\n"
 
 
 int main(void) {
 	
 	Checking *myChecking = new Checking();
-	
+	Account* Savings = new Account("Savings");
 
 	std::cout << HEADER << std::endl;
 	menuPrint();
@@ -28,7 +34,7 @@ int main(void) {
 	while (userChoice != "q") {
 		std::cout << "-->> ";
 		std::cin >> userChoice;
-		menuSwitch(userChoice,myChecking);
+		menuSwitch(userChoice,myChecking,Savings);
 	}
 	bool debug = false;
 	if (debug) {
@@ -36,43 +42,29 @@ int main(void) {
 	}
 	
 	return 0;
-
 }
 
-void menuSwitch(std::string& userChoice, Checking *myChecking) {
+void menuSwitch(std::string& userChoice, Checking *myChecking, Account *Savings) {
 	double sum = 0.0;
 	std::string categoryName = "";
 	int retVal;
 	if (userChoice == "show") {
-		menuPrint();
+		
 	}
 	else if (userChoice == "in") {
-		std::cout << "enter an amount -->> ";
-		std::cin >> sum;
-		std::cout << "enter a destination category -->> ";
-		std::cin >> categoryName;
-		retVal = myChecking->deposit(sum,categoryName);
-		if (retVal == -1) {
-			std::cout << "error: no categories to deposit to\n";
-		}
-		else if (retVal == -2) {
-			std::cout << "error: " << categoryName << " is not a valid category \n";
-		}
-		else {
-			std::cout << "success: $" << sum << " has been deposited to " << categoryName << " account\n";
-		}
+		in(myChecking);
 	}
 	else if (userChoice == "out") {
-		std::cout << "withdraw" << std::endl;
+		out(myChecking);
 	}
 	else if (userChoice == "trans") {
-		std::cout << "transfer" << std::endl;
+		trans(myChecking,Savings);
 	}
 	else if (userChoice == "mkcat") {
-		std::cout << "create category" << std::endl;
+		mkcat(myChecking);
 	}
 	else if (userChoice == "rmcat") {
-		std::cout << "remove category" << std::endl;
+		rmcat(myChecking);
 	}
 	else if (userChoice == "opt") {
 		std::cout << "options print" << std::endl;
@@ -81,7 +73,167 @@ void menuSwitch(std::string& userChoice, Checking *myChecking) {
 		std::cout << "leaving" << std::endl;
 	}
 	else {
-		std::cout << "enter a valid choice" << std::endl;
+		std::cout << "enter a valid command" << std::endl;
+	}
+}
+
+void mkcat(Checking *myChecking) {
+	int retVal;
+	std::string categoryName;
+	std::cout << "enter new category name -->> ";
+	std::cin >> categoryName;
+	retVal = myChecking->createCategory(categoryName);
+	if (retVal == -1) {
+		std::cout << "error: " << categoryName << " already exists\n";
+	}
+	else if (retVal == 0) {
+		std::cout << "success: " << categoryName << " added as new category\n";
+	}
+}
+
+void in(Checking* myChecking) {
+	double sum;
+	std::string categoryName;
+	int retVal;
+	std::cout << "enter an amount -->> ";
+	std::cin >> sum;
+	std::cout << "enter a destination category -->> ";
+	std::cin >> categoryName;
+	retVal = myChecking->deposit(sum, categoryName);
+	if (retVal == -1) {
+		std::cout << "error: no categories to deposit to\n";
+	}
+	else if (retVal == -2) {
+		std::cout << "error: " << categoryName << " is not a valid category \n";
+	}
+	else {
+		std::cout << "success: $" << sum << " has been deposited to " << categoryName << " account\n";
+	}
+}
+
+void out(Checking* myChecking) {
+	double sum;
+	std::string categoryName;
+	int retVal;
+	std::cout << "enter an amount -->> ";
+	std::cin >> sum;
+	std::cout << "enter a destination category -->> ";
+	std::cin >> categoryName;
+	retVal = myChecking->withdraw(sum, categoryName);
+	if (retVal == -1) {
+		std::cout << "error: no categories to withdraw from \n";
+	}
+	else if (retVal == -2) {
+		std::cout << "error: " << categoryName << " is not a valid category \n";
+	}
+	else if (retVal == -3) {
+		std::cout << "error: attempted to overdraft checking account \n";
+	}
+	else if (retVal == -4) {
+		std::cout << "error: attempted to overdraft " << categoryName << "\n";
+	}
+	else if (retVal == 0) {
+		std::cout << "success: $" << sum << " withdrawn from " << categoryName << "\n";
+	}
+}
+
+void rmcat(Checking* myChecking) {
+	std::string categoryName;
+	int retVal;
+	std::cout << "enter the name of category to remove -->> ";
+	std::cin >> categoryName;
+	retVal = myChecking->removeCategory(categoryName);
+	if (retVal == -1) {
+		std::cout << "error: no categories to remove\n";
+	}
+	else if (retVal == -2) {
+		std::cout << "error: " << categoryName << " is not a valid category \n";
+	}
+	else if (retVal == -3) {
+		std::cout << "error: " << categoryName << " must have balance $0.00 to remove \n";
+	}
+	else if (retVal == 0) {
+		std::cout << "success: " << categoryName << " removed \n";
+	}
+	
+}
+
+void trans(Checking* myChecking, Account *Savings) {
+	std::string withdrawFrom;
+	std::string depositTo;
+	int retVal;
+	double sum; 
+	std::string userChoice;
+	Account* temp;
+
+	std::cout << "enter a valid choice:\n";
+	std::cout << "A) checking to savings\n";
+	std::cout << "B) savings to checking\n";
+	std::cout << "C) category to category\n";
+	std::cin >> userChoice;
+
+	if (userChoice == "A") {
+		std::cout << "withdraw from -->> ";
+		std::cin >> withdrawFrom;
+		std::cout << "amount -->> ";
+		std::cin >> sum;
+		retVal = myChecking->withdraw(sum, withdrawFrom);
+		if (retVal == -1) {
+			std::cout << "error: no categories to transfer from\n";
+		}
+		else if (retVal == -2) {
+			std::cout << "error: " << withdrawFrom << " is not a valid category \n";
+		}
+		else if (retVal ==- 3) {
+			std::cout << "error: attempted to overdraft checking account \n";
+		}
+		else if (retVal == -4) {
+			std::cout << "error: attempted to overdraft " << withdrawFrom << "\n";
+		}
+		else if (retVal == 0) {
+			Savings->deposit(sum);
+			std::cout << "success: $" << sum << " transfered from " << withdrawFrom << " to Savings \n";
+		}
+	}
+	else if (userChoice == "B") {
+		std::cout << "to category -->> ";
+		std::cin >> depositTo;
+		std::cout << "amount -->> ";
+		std::cin >> sum;
+		// See if the select category is valid or is its empty. need to add ckecing->categories();
+		temp = myChecking->getCategory(depositTo);
+		if (myChecking->isEmpty()) {
+			std::cout << "error: no categories to transfer from\n";
+		}
+//need to make sure that the categories was non empty, but the category was not found. 
+		else if (!myChecking->isEmpty() && temp == NULL) {
+			std::cout << "error: " << withdrawFrom << " is not a valid category \n";
+		}
+		else if (temp != NULL) {
+			Savings->withdraw(sum);
+			myChecking->deposit(sum, depositTo);
+			std::cout << "success: $" << sum << " transfered from Savings, to " << withdrawFrom << "\n";
+		}
+	}
+	else if (userChoice == "C") {
+		std::cout << "to category -->> ";
+		std::cin >> depositTo;
+		std::cout << "from category -->> ";
+		std::cin >> withdrawFrom;
+		std::cout << "amount -->> ";
+		std::cin >> sum;
+		
+		/*
+		THE BREAKDOWN:
+		1) ensure destination is valid 
+			a) Could be empty list. use isempty
+			b) Could be a DNE category
+			c) is valid 
+				i) Repeat check but for the category to pull from. 
+					1) Now check that that category to pull from returned 0. display messages accordingly. 
+		*/
+		
+
 	}
 }
 
@@ -93,7 +245,7 @@ void menuPrint() {
 	std::cout << "out) withdraw \n";
 	std::cout << "trans) transfer \n";
 	std::cout << "mkcat) create category \n";
-	std::cout << "rmcat remove category \n";
+	std::cout << "rmcat) remove category \n";
 	std::cout << "opt) options \n";
 	std::cout << "q) quit \n";
 }
@@ -254,9 +406,6 @@ void clearTest() {
 	int retVal = myList->print();
 	std::cout << "\n" << retVal;
 	
-	
-	
-
 }
 
 void ptrTest() {
