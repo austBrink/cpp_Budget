@@ -25,6 +25,10 @@ Account* Checking::getCategory(std::string categoryName) {
 	return categories -> getCategory(categoryName);
 }
 
+bool Checking::isEmpty() {
+	return categories->isEmpty();
+}
+
 int Checking::deposit(double sum, std::string categoryName) {
 	if (categories->isEmpty()) {
 		return -1;
@@ -84,6 +88,10 @@ int Checking::removeCategory(std::string categoryName) {
 	delete removeThis;
 }
 
+void Checking::show() {
+	categories->print();
+}
+
 
 std::string Checking::getName() {
 	return name;
@@ -92,6 +100,7 @@ std::string Checking::getName() {
 double Checking::getBalance() {
 	return balance;
 }
+
 
 
 

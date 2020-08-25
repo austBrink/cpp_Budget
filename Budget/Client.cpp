@@ -15,7 +15,7 @@ void tests();
 void menuPrint();
 void menuSwitch(std::string& userChoice, Checking *myChecking, Account *Savings); 
 void mkcat(Checking* myChecking);
-void in(Checking* myChecking);
+void in(Checking* myChecking, Account *Savings);
 void out(Checking* myChecking);
 void rmcat(Checking *myChecking);
 void trans(Checking* myChecking, Account *Savings);
@@ -49,10 +49,11 @@ void menuSwitch(std::string& userChoice, Checking *myChecking, Account *Savings)
 	std::string categoryName = "";
 	int retVal;
 	if (userChoice == "show") {
-		
+		myChecking->show();
+		std::cout << "Savings:" << Savings->getBalance()<<std::endl;
 	}
 	else if (userChoice == "in") {
-		in(myChecking);
+		in(myChecking, Savings);
 	}
 	else if (userChoice == "out") {
 		out(myChecking);
@@ -91,7 +92,7 @@ void mkcat(Checking *myChecking) {
 	}
 }
 
-void in(Checking* myChecking) {
+void in(Checking* myChecking, Account *Savings) {
 	double sum;
 	std::string categoryName;
 	int retVal;
@@ -99,16 +100,23 @@ void in(Checking* myChecking) {
 	std::cin >> sum;
 	std::cout << "enter a destination category -->> ";
 	std::cin >> categoryName;
-	retVal = myChecking->deposit(sum, categoryName);
-	if (retVal == -1) {
-		std::cout << "error: no categories to deposit to\n";
-	}
-	else if (retVal == -2) {
-		std::cout << "error: " << categoryName << " is not a valid category \n";
+	if (categoryName == "Savings") {
+		Savings->deposit(sum);
+		std::cout << "success: $" << sum << " has been deposited to Savings account\n";
 	}
 	else {
-		std::cout << "success: $" << sum << " has been deposited to " << categoryName << " account\n";
+		retVal = myChecking->deposit(sum, categoryName);
+		if (retVal == -1) {
+			std::cout << "error: no categories to deposit to\n";
+		}
+		else if (retVal == -2) {
+			std::cout << "error: " << categoryName << " is not a valid category \n";
+		}
+		else {
+			std::cout << "success: $" << sum << " has been deposited to " << categoryName << " account\n";
+		}
 	}
+	
 }
 
 void out(Checking* myChecking) {
@@ -205,14 +213,19 @@ void trans(Checking* myChecking, Account *Savings) {
 		if (myChecking->isEmpty()) {
 			std::cout << "error: no categories to transfer from\n";
 		}
-//need to make sure that the categories was non empty, but the category was not found. 
+		//need to make sure that the categories was non empty, but the category was not found. 
 		else if (!myChecking->isEmpty() && temp == NULL) {
-			std::cout << "error: " << withdrawFrom << " is not a valid category \n";
+			std::cout << "error: " << depositTo << " is not a valid category \n";
 		}
 		else if (temp != NULL) {
-			Savings->withdraw(sum);
-			myChecking->deposit(sum, depositTo);
-			std::cout << "success: $" << sum << " transfered from Savings, to " << withdrawFrom << "\n";
+			retVal = Savings->withdraw(sum);
+			if (retVal == -1) {
+				std::cout << "error: attempted savings overdraft\n";
+			}
+			else if(retVal == 0) {
+				myChecking->deposit(sum, depositTo);
+				std::cout << "success: $" << sum << " transfered from Savings, to " << depositTo << "\n";
+			}
 		}
 	}
 	else if (userChoice == "C") {
@@ -222,18 +235,28 @@ void trans(Checking* myChecking, Account *Savings) {
 		std::cin >> withdrawFrom;
 		std::cout << "amount -->> ";
 		std::cin >> sum;
-		
-		/*
-		THE BREAKDOWN:
-		1) ensure destination is valid 
-			a) Could be empty list. use isempty
-			b) Could be a DNE category
-			c) is valid 
-				i) Repeat check but for the category to pull from. 
-					1) Now check that that category to pull from returned 0. display messages accordingly. 
-		*/
-		
 
+		temp = myChecking->getCategory(depositTo);
+		if (myChecking->isEmpty()) {
+			std::cout << "error: no categories to transfer from\n";
+		} else if(!myChecking->isEmpty() && temp == NULL) {
+			std::cout << "error: " << depositTo << " is not a valid category \n";
+		}
+		else if (temp != NULL) {
+			// now check to see if location is valid. 
+			temp = myChecking->getCategory(withdrawFrom);
+			if (myChecking->isEmpty()) {
+				std::cout << "error: no categories to transfer from\n";
+			}
+			else if (!myChecking->isEmpty() && temp == NULL) {
+				std::cout << "error: " << withdrawFrom << " is not a valid category \n";
+			}
+			else if (temp != NULL) {
+				myChecking->withdraw(sum, withdrawFrom);
+				myChecking->deposit(sum, depositTo);
+				std::cout << "success: $" << sum << " transfered from " << withdrawFrom << " to " << depositTo << "\n";
+			}
+		}
 	}
 }
 

@@ -20,6 +20,8 @@ public:
 	int withdraw(double sum, std::string categoryName);
 	double getBalance();
 	std::string getName();
+	bool isEmpty();
+	void show();
 
 };
 

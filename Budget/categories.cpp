@@ -50,22 +50,24 @@ Account * Categories::remove(std::string name) {
 		return NULL;
 	}
 
+	// traverse list. Break as soon as we drop out. OR when we find the node with the right name. 
 	while ((temp != NULL) && name != temp->getName()) {
 		prev = temp;
 		temp = temp->next;
 	}
 
+	// what if not found. CASE 2
 	if (temp == NULL) {
 		return NULL;
 	}
-
-	else if (prev==NULL) {
-		(temp->next)->prev = prev;
+	// now need to see if we are at the head. 
+	else if (temp == root) {
+		//either points to the next thingy. OR goes ahead and sets it to null because we gutted the list if only head existed. 
 		root = root->next;
 		return temp;
 	}
+
 	else {
-		
 		prev->next = temp->next;
 		return temp;
 	}
