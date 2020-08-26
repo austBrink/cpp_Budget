@@ -3,6 +3,7 @@
 #include"Categories.h"
 #include"Checking.h"
 #include<string>
+#include<limits>
 
 
 void savingsTest();
@@ -68,7 +69,7 @@ void menuSwitch(std::string& userChoice, Checking *myChecking, Account *Savings)
 		rmcat(myChecking);
 	}
 	else if (userChoice == "opt") {
-		std::cout << "options print" << std::endl;
+		menuPrint();
 	}
 	else if (userChoice == "q") {
 		std::cout << "leaving" << std::endl;
@@ -92,12 +93,21 @@ void mkcat(Checking *myChecking) {
 	}
 }
 
+
+
+
 void in(Checking* myChecking, Account *Savings) {
 	double sum;
 	std::string categoryName;
 	int retVal;
 	std::cout << "enter an amount -->> ";
 	std::cin >> sum;
+	while (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "error: enter numeric values only -->> ";
+		std::cin >> sum;
+	}
 	std::cout << "enter a destination category -->> ";
 	std::cin >> categoryName;
 	if (categoryName == "Savings") {
@@ -125,7 +135,13 @@ void out(Checking* myChecking) {
 	int retVal;
 	std::cout << "enter an amount -->> ";
 	std::cin >> sum;
-	std::cout << "enter a destination category -->> ";
+	while (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+		std::cout << "error: enter numeric values only -->>";
+		std::cin >> sum;
+	}
+	std::cout << "enter a category to withdraw from -->> ";
 	std::cin >> categoryName;
 	retVal = myChecking->withdraw(sum, categoryName);
 	if (retVal == -1) {
@@ -185,6 +201,12 @@ void trans(Checking* myChecking, Account *Savings) {
 		std::cin >> withdrawFrom;
 		std::cout << "amount -->> ";
 		std::cin >> sum;
+		while (std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "error: enter numeric values only -->>";
+			std::cin >> sum;
+		}
 		retVal = myChecking->withdraw(sum, withdrawFrom);
 		if (retVal == -1) {
 			std::cout << "error: no categories to transfer from\n";
@@ -208,6 +230,12 @@ void trans(Checking* myChecking, Account *Savings) {
 		std::cin >> depositTo;
 		std::cout << "amount -->> ";
 		std::cin >> sum;
+		while (std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "error: enter numeric values only -->>";
+			std::cin >> sum;
+		}
 		// See if the select category is valid or is its empty. need to add ckecing->categories();
 		temp = myChecking->getCategory(depositTo);
 		if (myChecking->isEmpty()) {
@@ -235,13 +263,19 @@ void trans(Checking* myChecking, Account *Savings) {
 		std::cin >> withdrawFrom;
 		std::cout << "amount -->> ";
 		std::cin >> sum;
-
+		while (std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "error: enter numeric values only -->>";
+			std::cin >> sum;
+		}
 		temp = myChecking->getCategory(depositTo);
 		if (myChecking->isEmpty()) {
 			std::cout << "error: no categories to transfer from\n";
 		} else if(!myChecking->isEmpty() && temp == NULL) {
 			std::cout << "error: " << depositTo << " is not a valid category \n";
 		}
+		// needed multiple checks to give user an precise message. 
 		else if (temp != NULL) {
 			// now check to see if location is valid. 
 			temp = myChecking->getCategory(withdrawFrom);
@@ -252,11 +286,21 @@ void trans(Checking* myChecking, Account *Savings) {
 				std::cout << "error: " << withdrawFrom << " is not a valid category \n";
 			}
 			else if (temp != NULL) {
-				myChecking->withdraw(sum, withdrawFrom);
-				myChecking->deposit(sum, depositTo);
-				std::cout << "success: $" << sum << " transfered from " << withdrawFrom << " to " << depositTo << "\n";
+				retVal = myChecking->withdraw(sum, withdrawFrom);
+				if(retVal == -3){
+					std::cout << "error: attempted Checking overdraft\n";
+				}else if (retVal == -4){
+					std::cout << "error: attempted category overdraft of " << withdrawFrom << "\n";
+				}
+				else if (retVal == 0) {
+					myChecking->deposit(sum, depositTo);
+					std::cout << "success: $" << sum << " transfered from " << withdrawFrom << " to " << depositTo << "\n";
+				}
+				
 			}
 		}
+	} else {
+		std::cout << userChoice << " is not a valid command\n";
 	}
 }
 
@@ -459,60 +503,48 @@ void test_getCategory() {
 
 void testChecking() {
 
-	//create a checking account.
-	//Checking* myChecking = new Checking();
-	//
-	//std::cout << myChecking->getName() << "\n";
-	//
-	//int retVal;
-	//
-	//retVal = myChecking->removeCategory("dope");
-	//std::cout << retVal << std::endl;
-	//
-	//retVal = myChecking->deposit(50,"catOne");
-	//std::cout << retVal << std::endl;
-	//
-	//std::cout << "ADD FUNCTIONS" << std::endl;
-	//retVal = myChecking->createCategory("catOne");
-	//std::cout << retVal << std::endl;
-	//retVal = myChecking->createCategory("catTwo");
-	//std::cout << retVal << std::endl;
-	//retVal = myChecking->createCategory("catTwo");
-	//std::cout << retVal << std::endl;
-	//std::cout << myChecking->getName() << std::endl;
-	//
-	//std::cout << "REMOVE" << std::endl;
-	//retVal = myChecking->removeCategory("dope");
-	//std::cout << retVal << std::endl;
-	//retVal = myChecking->removeCategory("catTwo");
-	//std::cout << retVal << std::endl;
-	//
-	//std::cout << "GET CAT " << std::endl;
-	//
-	//Account* temp = myChecking->getCategory/("catOne");
-	//std::cout << temp->getName() << std::endl;
-	//
-	//std::cout << "DEPO" << std::endl;
-	//retVal = myChecking->deposit(90, "dope");
-	//std::cout << retVal << std::endl;
-	//retVal = myChecking->deposit(90, "catTwo");
-	//std::cout << retVal << std::endl;
-	//
-	//// testing the withdraw and remove // 
-	//std::cout << "TESTING WITHDRAW" << std::endl;
-	//retVal = myChecking->withdraw(90, "catThree");
-	//myChecking->deposit(900, "catTwo");
-	//myChecking->createCategory("catThree");
-	//std::cout << retVal << std::endl;
-	//myChecking -> deposit(100, "catThree");
-	//retVal = myChecking->withdraw(90, "catThree");
-	//std::cout << retVal << std::endl;
-	//retVal = myChecking->withdraw(100, "catThree");
-	//std::cout << retVal << std::endl;
-	//retVal = myChecking->withdraw(1000, "catThree");
-	//std::cout << retVal << std::endl;
-
-
+	/*
+	Checking* myChecking = new Checking();
+	std::cout << myChecking->getName() << "\n";
+	int retVal;
+	retVal = myChecking->removeCategory("dope");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->deposit(50,"catOne");
+	std::cout << retVal << std::endl;
+	std::cout << "ADD FUNCTIONS" << std::endl;
+	retVal = myChecking->createCategory("catOne");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->createCategory("catTwo");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->createCategory("catTwo");
+	std::cout << retVal << std::endl;
+	std::cout << myChecking->getName() << std::endl;
+	std::cout << "REMOVE" << std::endl;
+	retVal = myChecking->removeCategory("dope");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->removeCategory("catTwo");
+	std::cout << retVal << std::endl;
+	std::cout << "GET CAT " << std::endl;
+	Account* temp = myChecking->getCategory("catOne");
+	std::cout << temp->getName() << std::endl;
+	std::cout << "DEPO" << std::endl;
+	retVal = myChecking->deposit(90, "dope");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->deposit(90, "catTwo");
+	std::cout << retVal << std::endl;
+	// testing the withdraw and remove // 
+	std::cout << "TESTING WITHDRAW" << std::endl;
+	retVal = myChecking->withdraw(90, "catThree");
+	myChecking->deposit(900, "catTwo");
+	myChecking->createCategory("catThree");
+	std::cout << retVal << std::endl;
+	myChecking -> deposit(100, "catThree");
+	retVal = myChecking->withdraw(90, "catThree");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->withdraw(100, "catThree");
+	std::cout << retVal << std::endl;
+	retVal = myChecking->withdraw(1000, "catThree");
+	std::cout << retVal << std::endl;
 	Checking* myChecking = new Checking();
 	int retVal;
 	retVal = myChecking->withdraw(100,"one");
@@ -522,7 +554,6 @@ void testChecking() {
 	myChecking->deposit(100, "one");
 	myChecking->createCategory("two");
 	myChecking->deposit(200,"two");
-
 	//should be 0 
 	retVal = myChecking->withdraw(50, "one");
 	std::cout << retVal << std::endl;
@@ -534,12 +565,10 @@ void testChecking() {
 	std::cout << retVal << std::endl;
 	//should be -3
 	retVal = myChecking->withdraw(900, "one");
-
 	std::cout << retVal << std::endl;
-
 	// IT WORKS 
 	
-
+	*/
 
 	
 	
