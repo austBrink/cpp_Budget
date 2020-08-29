@@ -43,5 +43,9 @@ std::string Account::getName() {
 	return name;
 }
 
+void Account::setBalance(double sum) {
+	balance = sum;
+}
+
 
 

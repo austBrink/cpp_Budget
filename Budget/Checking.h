@@ -3,6 +3,8 @@
 #include <string>
 #include "categories.h"
 #include "Account.h"
+
+
 class Checking {
 
 private:
@@ -22,7 +24,8 @@ public:
 	std::string getName();
 	bool isEmpty();
 	void show();
-
+	void setBalance(double sum);
+	void save();
 };
 
 

@@ -24,6 +24,7 @@ public:
 	int withdraw(double sum);
 	double getBalance();
 	std::string getName();
+	void setBalance(double sum);
 };
 
 #endif 

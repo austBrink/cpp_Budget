@@ -92,6 +92,25 @@ int Categories :: print() {
 	}
 }
 
+int Categories::save() {
+
+	Account* temp;
+	temp = root;
+	std::fstream data;
+	data.open("dataSafe.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+
+	if (root == NULL) {
+		return -1;
+	}
+
+	while (temp != NULL) {
+		data << temp->getName() << "\n" << temp->getBalance() << std::endl;
+		temp = temp->next;
+	}
+	data.close();
+
+}
+
 void Categories::clear() {
 	Account* temp;
 	temp = root;

@@ -92,6 +92,10 @@ void Checking::show() {
 	categories->print();
 }
 
+void Checking::save() {
+	categories->save();
+}
+
 
 std::string Checking::getName() {
 	return name;
@@ -101,6 +105,9 @@ double Checking::getBalance() {
 	return balance;
 }
 
+void Checking :: setBalance(double sum) {
+	balance = sum;
+}
 
 
 

@@ -1,6 +1,8 @@
 #ifndef CATEGORIES 
 #define CATEGORIES 
 #include"Account.h"
+#include <fstream>
+
 class Categories {
 
 private:
@@ -14,6 +16,7 @@ public:
 	int print();
 	bool isEmpty();
 	Account* getCategory(std::string name);
+	int save();
 };
 
 #endif 
