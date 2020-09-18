@@ -21,18 +21,13 @@ void in(Checking* myChecking, Account *Savings);
 void out(Checking* myChecking);
 void rmcat(Checking *myChecking);
 void trans(Checking* myChecking, Account *Savings);
-void startUp(Checking* myChecking, Account *Savings);
-void shutDown(Checking* myChecking, Account* Savings);
-
 
 #define HEADER "\n\t\t~~BUDGET~~\n"
 
 
 int main(void) {
-	
 	Checking *myChecking = new Checking();
 	Account* Savings = new Account("Savings");
-	startUp(myChecking, Savings);
 	std::cout << HEADER << std::endl;
 	menuPrint();
 	std::string userChoice = "";
@@ -320,38 +315,6 @@ void menuPrint() {
 	std::cout << "rmcat) remove category \n";
 	std::cout << "opt) options \n";
 	std::cout << "q) quit \n";
-}
-
-void startUp(Checking* myChecking, Account* Savings) {
-	std::fstream dataSafe;
-	dataSafe.open("dataSafe.txt");
-	double depo;
-	dataSafe >> depo;
-	myChecking->setBalance(depo);
-	std::cout << myChecking->getBalance();
-	dataSafe >> depo;
-	Savings->setBalance(depo);
-	// need to seperate name from balance. done. did it on multple lines 
-
-	//now need to find away to loop all the way. 
-	std::string name;
-	while (!dataSafe.eof()) {
-		dataSafe >> name;
-		myChecking->createCategory(name);
-		dataSafe >> depo;
-		myChecking->deposit(depo, name);
-	}
-	
-}
-
-
-void shutDown(Checking* myChecking, Account* Savings) {
-	std::fstream dataSafe;
-	dataSafe.open("dataSafe.txt");
-	dataSafe << myChecking->getBalance()<<std::endl;
-	dataSafe << Savings->getBalance()<< std::endl;
-	dataSafe.close();
-	myChecking->save();
 }
 
 
