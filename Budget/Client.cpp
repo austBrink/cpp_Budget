@@ -23,9 +23,7 @@ void trans(Checking* myChecking, Account *Savings);
 void startUp(Checking* myChecking, Account *Savings);
 void shutDown(Checking* myChecking, Account* Savings);
 
-
 #define HEADER "\n\t\t~~BUDGET~~\n"
-
 
 int main(void) {
 	
@@ -300,7 +298,6 @@ void trans(Checking* myChecking, Account *Savings) {
 					myChecking->deposit(sum, depositTo);
 					std::cout << "success: $" << sum << " transfered from " << withdrawFrom << " to " << depositTo << "\n";
 				}
-				
 			}
 		}
 	} else {
@@ -324,35 +321,31 @@ void menuPrint() {
 void startUp(Checking* myChecking, Account* Savings) {
 	std::fstream dataSafe;
 	dataSafe.open("dataSafe.txt");
+	//what if there's shit in there you gott be able to handle non numeric. Use something similar to the terminal user check. 
 	double depo;
-	dataSafe >> depo;
-	myChecking->setBalance(depo);
-	std::cout << myChecking->getBalance();
 	dataSafe >> depo;
 	Savings->setBalance(depo);
 	// need to seperate name from balance. done. did it on multple lines 
-
 	//now need to find away to loop all the way. 
 	std::string name;
+	int retVal;
 	while (!dataSafe.eof()) {
 		dataSafe >> name;
-		myChecking->createCategory(name);
+		retVal = myChecking->createCategory(name);
 		dataSafe >> depo;
-		myChecking->deposit(depo, name);
+		if (retVal == 0) {
+			myChecking->deposit(depo, name);
+		}
 	}
-	
 }
-
 
 void shutDown(Checking* myChecking, Account* Savings) {
 	std::fstream dataSafe;
-	dataSafe.open("dataSafe.txt");
-	dataSafe << myChecking->getBalance()<<std::endl;
+	dataSafe.open("dataSafe.txt", std::ofstream::out | std::ofstream::trunc);
 	dataSafe << Savings->getBalance()<< std::endl;
 	dataSafe.close();
 	myChecking->save();
 }
-
 
 void tests() {
 	savingsTest();
@@ -379,6 +372,7 @@ void savingsTest() {
 	savBal = Savings->getBalance();
 	std::cout << savBal << std::endl;
 	//WITHDRAW 
+
 	//case 1. 
 	int retVal = Savings->withdraw(0.5);
 	if (retVal == 0) {
@@ -397,7 +391,6 @@ void savingsTest() {
 	*************************************************************/
 
 	// savings is in the middle of our little linked list we are going to make. 
-
 	Account* Savings_0 = new Account("0");
 	Savings_0->deposit(100);
 	Account* Savings_2 = new Account("2");
@@ -427,7 +420,6 @@ void savingsTest() {
 		std::cout << temp->getName() << std::endl;
 		temp = temp->next;
 	}
-	
 }
 
 

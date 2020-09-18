@@ -1,6 +1,7 @@
 #include "Checking.h"
 #include <string.h>
 
+// Solution. Create a seperate file for savings then the list for the other guys will be append? will that solve it. 
 
 Checking::Checking() {
 	categories = new Categories();
@@ -95,7 +96,6 @@ void Checking::show() {
 void Checking::save() {
 	categories->save();
 }
-
 
 std::string Checking::getName() {
 	return name;

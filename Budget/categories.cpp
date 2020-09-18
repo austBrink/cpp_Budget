@@ -8,6 +8,7 @@
 
 #include "categories.h"
 #include"iostream"
+#include <string>
 
 Categories::Categories() {
 	root = NULL;
@@ -93,22 +94,19 @@ int Categories :: print() {
 }
 
 int Categories::save() {
-
 	Account* temp;
 	temp = root;
 	std::fstream data;
-	data.open("dataSafe.txt", std::fstream::in | std::fstream::out | std::fstream::app);
-
-	if (root == NULL) {
+	data.open("dataSafe.txt", std::ios_base::app);
+	if (temp == NULL) {
 		return -1;
 	}
-
-	while (temp != NULL) {
-		data << temp->getName() << "\n" << temp->getBalance() << std::endl;
+	while (temp!= NULL) {
+		data << temp->getName() << std::endl;
+		data << temp->getBalance() << std::endl;
 		temp = temp->next;
 	}
 	data.close();
-
 }
 
 void Categories::clear() {
@@ -130,11 +128,15 @@ bool Categories::isEmpty() {
 	return true;
 }
 
-
+/*
+Used to obtain existing category by name. Returns null if list is empty. returns null if not found. returns account object if found. 
+*/
 Account* Categories::getCategory(std::string name) {
+
 	if (isEmpty()) {
 		return NULL;
 	}
+
 	Account* temp = root;
 
 	while (temp != NULL && name != temp->getName()) {
